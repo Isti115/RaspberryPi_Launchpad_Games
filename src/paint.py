@@ -20,31 +20,25 @@ colors = {
 }
 
 def init_colors(LP):
-  LP.LedCtrlXY(5, 7, 1, 3)
   for c in colors:
-    #LP.LedCtrlXY(5, 5, 3, 3)
     pos = c.split("|")
     x, y = int(pos[0]), int(pos[1])
     LP.LedCtrlXY(x, y, colors[c][0], colors[c][1])
-    #print(c, pos, colors[c], x, y)
 
 def start(LP):
   init_colors(LP)
   currColor = [0, 3]
   
-  LP.LedCtrlXY(5, 5, 1, 3)
-  
   exit = 0
   fill = 0
   
-  while 1:  
+  while True:
     time.wait(5)
     
     but = LP.ButtonStateXY()
     
     if but != []:
       if [but[0], but[1]] in [[0, 1], [0, 8], [7, 1], [7, 8]]:
-        #(but[0] == 0 or but[0] == 7) and (but[1] == 1 or but[1] == 8):
         if but[2]:
           exit += 1
         else:
@@ -55,7 +49,7 @@ def start(LP):
         if but[2]:
           fill += 1
         else:
-          fill -= 1    
+          fill -= 1
           
     if exit == 4:
       break
@@ -65,7 +59,6 @@ def start(LP):
         LP.LedCtrlXY(i % 8, int(i / 8) + 1, currColor[0], currColor[1])
     
     if but != [] and but[2]:
-      print(but)
       if but[0] == 8 or but[1] == 0:
         currColor = colors[str(but[0]) + "|" + str(but[1])]
       else:

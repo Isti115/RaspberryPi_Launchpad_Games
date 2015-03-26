@@ -540,7 +540,7 @@ class Launchpad:
 	#-- Dir specifies: -1 to left, 0 no scroll, 1 to right
 	#-- The "no scroll" characters are sent 8 times to have a comparable speed.
 	#-------------------------------------------------------------------------------------
-	def LedCtrlString( self, str, red, green, dir = 0 ):
+	def LedCtrlString( self, str, red, green, dir = 0, interval = 150):
 
 		# REFAC2015: As it seems, a timer somewhere around 150ms/display works for both
 		#            Standard and S/Mini variants.
@@ -550,19 +550,19 @@ class Launchpad:
 				for off in range(5,-8,-1):
 					self.LedCtrlChar(i, red, green, off)
 					# TESTING ONLY (slowdown for S/Mini)
-					time.wait(150);
+					time.wait(interval);
 		elif dir == 0:
 			for i in str:
 				for off in range(4):
 					self.LedCtrlChar(i, red, green)
 					# TESTING ONLY (slowdown for S/Mini)
-					time.wait(150);
+					time.wait(interval);
 		elif dir == 1:
 			for i in str:
 				for off in range(-5,8):
 					self.LedCtrlChar(i, red, green, off)
 					# TESTING ONLY (slowdown for S/Mini)
-					time.wait(150);
+					time.wait(interval);
 					
 
 					

@@ -9,40 +9,25 @@ def countdown(LP):
 
 def init_snake(LP, snake):
   countdown(LP)
-  snake["alive"] = True
-  
-  snake["score"] = 0
-  
   snake["head"] = [5, 5]
   snake["body"] = [[4, 5], [3, 5]]
   snake["dir"] = 1
   
   snake["food"] = [random.randint(0, 7), random.randint(1, 8)]
-  while snake["food"] in snake["body"] or snake["food"] == snake["head"]:
-    snake["food"] = [random.randint(0, 7), random.randint(1, 8)]
 
 dirMatrix = [[0, -1], [1, 0], [0, 1], [-1, 0]]
 
 def update(LP, snake):
-  nextHead = [(snake["head"][0] + dirMatrix[snake["dir"]][0]) % 8,
-              (snake["head"][1] + dirMatrix[snake["dir"]][1] - 1) % 8 + 1]
-  
-  if nextHead in snake["body"]:
-    snake["alive"] = False
-    return
-    
   snake["body"].insert(0, snake["head"])
   
-  snake["head"] = nextHead
+  snake["head"] = [snake["head"][0] + dirMatrix[snake["dir"]][0], snake["head"][1] + dirMatrix[snake["dir"]][1]]
   
   LP.LedCtrlXY(snake["head"][0], snake["head"][1], 1, 3)
   for b in snake["body"]:
     LP.LedCtrlXY(b[0], b[1], 0, 3)
   
   if snake["head"] == snake["food"]:
-    snake["score"] += 1
-    while snake["food"] in snake["body"] or snake["food"] == snake["head"]:
-      snake["food"] = [random.randint(0, 7), random.randint(1, 8)]
+    snake["food"] = [random.randint(0, 7), random.randint(1, 8)]
   else:
     last = snake["body"].pop()
     LP.LedCtrlXY(last[0], last[1], 0, 0)
@@ -60,7 +45,7 @@ def start(LP):
   
   time.wait(500)
   
-  while snake["alive"]:
+  while True:
     time.wait(500)
     
     but = LP.ButtonStateXY()
@@ -76,16 +61,3 @@ def start(LP):
         snake["dir"] = (snake["dir"] + 1) % 4
     
     update(LP, snake)
-  
-  if not snake["alive"]:
-    for i in range(3):
-      LP.LedCtrlXY(snake["head"][0], snake["head"][1], 0, 0)
-      for b in snake["body"]:
-        LP.LedCtrlXY(b[0], b[1], 0, 0)
-      time.wait(500)
-      LP.LedCtrlXY(snake["head"][0], snake["head"][1], 1, 3)
-      for b in snake["body"]:
-        LP.LedCtrlXY(b[0], b[1], 0, 3)
-      time.wait(500)
-    LP.LedCtrlString("Score: ", 0, 3, -1, 30)
-    LP.LedCtrlString(str(snake["score"]), 0, 3, -1, 100)
