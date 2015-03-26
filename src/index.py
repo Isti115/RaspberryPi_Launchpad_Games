@@ -5,12 +5,16 @@ import os
 
 import testa
 import testb
+import paint
+#import snake
 
 def drawMenu(LP):
   LP.Reset()
-  LP.LedCtrlXY(5, 1, 0, 3)
+  LP.LedCtrlXY(5, 1, 0, 1)
   LP.LedCtrlXY(6, 1, 3, 3)
+  LP.LedCtrlXY(3, 1, 1, 3)
   LP.LedCtrlXY(8, 8, 3, 0)
+  LP.LedCtrlXY(0, 8, 0, 3)
 
 def main():
   
@@ -26,16 +30,25 @@ def main():
     time.wait( 5 )
     
     but = LP.ButtonStateRaw()
-    if but != []:
+    if but != [] and but[1]:
       print( but )
-      if but[0] == 120:
-        testa.start(LP)
-        drawMenu(LP)
-      if but[0] == 5:
-        testb.start(LP)
-        drawMenu(LP)
       if but[0] == 6:
         os.system("sudo poweroff")
+      elif but[0] == 120:
+        LP.Reset()
+        testa.start(LP)
+        drawMenu(LP)
+      elif but[0] == 3:
+        LP.Reset()
+        paint.start(LP)
+        drawMenu(LP)
+      elif but[0] == 5:
+        LP.Reset()
+        testb.start(LP)
+        drawMenu(LP)
+      elif but[0] == 112:
+        LP.Reset()
+        #snake.start(LP)
         drawMenu(LP)
   
   LP.Reset() # turn all LEDs off
