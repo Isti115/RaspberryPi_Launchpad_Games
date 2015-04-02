@@ -55,6 +55,8 @@ def start(LP):
     if but != [] and but[2]:
       if but[0:2] == [8, 8]:
         break
+      if but[0:2] == snake["food"]:
+        snake["head"] = [3, 3]
       elif but[0:2] == [0, 0]:
         snake["dir"] = (snake["dir"] - 1) % 4
       elif but[0:2] == [1, 0]:

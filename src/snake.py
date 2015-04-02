@@ -13,8 +13,8 @@ def init_snake(LP, snake):
   
   snake["score"] = 0
   
-  snake["head"] = [5, 5]
-  snake["body"] = [[4, 5], [3, 5]]
+  snake["head"] = [3, 3]
+  snake["body"] = [[2, 3], [1, 3]]
   snake["dir"] = 1
   
   snake["food"] = [random.randint(0, 7), random.randint(1, 8)]
@@ -53,6 +53,9 @@ def start(LP):
   snake = {}
   
   init_snake(LP, snake)
+  LP.LedCtrlXY(snake["head"][0], snake["head"][1], 1, 3)
+  for b in snake["body"]:
+    LP.LedCtrlXY(b[0], b[1], 0, 3)
   
   LP.LedCtrlXY(0, 0, 0, 1)
   LP.LedCtrlXY(1, 0, 0, 1)
@@ -61,7 +64,7 @@ def start(LP):
   time.wait(500)
   
   while snake["alive"]:
-    time.wait(500)
+    time.wait(250)
     
     but = LP.ButtonStateXY()
     while but != [] and not but[2]:

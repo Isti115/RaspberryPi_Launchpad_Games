@@ -3,28 +3,47 @@ from pygame import time
 
 import os
 
+import menuanimation
+
 import hello
 import disco
 import paint
 import snake
 import snake_old
+import brush
 
-programs = {}
+programs = {
+  "h": {"program": hello,             "color": [0, 1]},
+  "d": {"program": disco,             "color": [3, 3]},
+  "p": {"program": paint,             "color": [1, 3]},
+  "s": {"program": snake,             "color": [0, 3]},
+  "o": {"program": snake_old,         "color": [0, 3]},
+  "b": {"program": brush,             "color": [3, 1]},
+  "m": {"program": menuanimation,     "color": [1, 1]}
+}
 
-def addProgram(program, color, *coords):
-  for c in coords:
-    programs[str(c[0]) + "|" + str(c[1])] = {"color": color, "program": program}
+layout = [
+  ["m", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", "p", "p", "p", " ", "h", " "],
+  [" ", "d", " ", "p", " ", "p", " ", " ", " "],
+  [" ", " ", " ", "p", "p", "p", " ", " ", " "],
+  ["s", "s", "s", "p", "b", "b", "b", " ", " "],
+  ["o", " ", " ", "p", "b", " ", " ", "b", " "],
+  ["s", "s", "s", " ", "b", "b", "b", " ", " "],
+  [" ", " ", "s", " ", "b", " ", " ", "b", " "],
+  ["s", "s", "s", " ", "b", "b", "b", " ", " "]
+]
 
 def drawMenu(LP):
   LP.Reset()
   
-  for p in programs:
-    pos = p.split("|")
-    x, y = int(pos[0]), int(pos[1])
-    LP.LedCtrlXY(x, y, programs[p]["color"][0], programs[p]["color"][1])
+  for y in range(9):
+    for x in range(9):
+      if layout[y][x] != " ":
+        LP.LedCtrlXY(x, y, programs[layout[y][x]]["color"][0], programs[layout[y][x]]["color"][1])
     
-  LP.LedCtrlXY(3, 0, 3, 0)
-  LP.LedCtrlXY(8, 5, 3, 0)
+  LP.LedCtrlXY(4, 0, 3, 0)
+  LP.LedCtrlXY(8, 4, 3, 0)
   
   # LP.LedCtrlXY(8, 7, 1, 0)
 
@@ -33,15 +52,11 @@ def main():
   LP = launchpad.Launchpad()
   LP.Open()
   
-  addProgram(hello, [0, 1], [0, 1])
-  addProgram(disco, [3, 3], [3, 2])
-  addProgram(paint, [1, 3], [5, 1], [6, 1], [7, 1], [5, 2], [7, 2], [5, 3], [6, 3], [7, 3], [5, 4], [5, 5], [5, 6])
-  addProgram(snake, [0, 3], [1, 4], [2, 4], [3, 4],         [1, 6], [2, 6], [3, 6], [3, 7], [1, 8], [2, 8], [3, 8])
-  addProgram(snake_old, [0, 3], [1, 5])
+  menuanimation.start(LP)
   
   drawMenu(LP)
   
-  exit = {"count": 0, "buttons": [[3, 0], [8, 5]]}
+  exit = {"count": 0, "buttons": [[4, 0], [8, 4]]}
   
   while True:
     time.wait(5)
@@ -59,9 +74,9 @@ def main():
       if but[0:2] == [8, 7]:
         pass
         # break
-      elif str(but[0]) + "|" + str(but[1]) in programs:
+      elif layout[but[1]][but[0]] != " ":
         LP.Reset()
-        programs[str(but[0]) + "|" + str(but[1])]["program"].start(LP)
+        programs[layout[but[1]][but[0]]]["program"].start(LP)
         drawMenu(LP)
         
         but = LP.ButtonStateXY()
