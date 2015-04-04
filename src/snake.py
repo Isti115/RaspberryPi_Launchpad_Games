@@ -66,9 +66,15 @@ def start(LP):
   while snake["alive"]:
     time.wait(250)
     
+    lastpress = [-1, -1, False]
+    
     but = LP.ButtonStateXY()
-    while but != [] and not but[2]:
+    while but != []:
+      if but[2]:
+        lastpress = but
       but = LP.ButtonStateXY()
+    
+    but = lastpress
     
     if but != [] and but[2]:
       if but[0:2] == [8, 8]:

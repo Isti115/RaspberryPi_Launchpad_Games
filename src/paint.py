@@ -63,4 +63,3 @@ def start(LP):
         currColor = colors[str(but[0]) + "|" + str(but[1])]
       else:
         LP.LedCtrlXY(but[0], but[1], currColor[0], currColor[1])
-        
